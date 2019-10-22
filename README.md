@@ -56,12 +56,14 @@ func main() {
 }
 ```
 ## Notes
--  No need use LoadPolicy and SavePolicy. 
-SavePolicy is overwrite to unimplement now. Cause dynamodb recreate table has latency, 
+-  No need use LoadPolicy and SavePolicy.
+
+    SavePolicy is overwrite to unimplement now. Cause dynamodb recreate table has latency,
 which is unreliable.
 
 - About RemoveFilteredPolicy
-RemoveFilteredPolicy is implement by getAllItems and then filter items to delete.
+
+    RemoveFilteredPolicy is implement by getAllItems and then filter items to delete.
 This may has latency when data is so big. Use as appropriate. 
  
 ## Getting Help
