@@ -32,7 +32,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	e := casbin.NewEnforcer("rbac_model.conf", a)
+	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
 
 	// Since autoSave is support.No need use LoadPolicy()
 	//e.LoadPolicy()
