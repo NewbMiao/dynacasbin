@@ -1,4 +1,4 @@
-module dynacasbin
+module github.com/newbmiao/dynacasbin
 
 go 1.13
 
