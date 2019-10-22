@@ -1,7 +1,7 @@
-DynamoDB Adapter
-====
+Dynacasbin
+==========
 
-DynamoDB Adapter is the [DynamoDB](https://aws.amazon.com/dynamodb/) adapter for [Casbin](https://github.com/casbin/casbin). With this library, Casbin can load policy from DynamoDB or save policy to it.
+Dynacasbin is the [DynamoDB](https://aws.amazon.com/dynamodb/) adapter for [Casbin](https://github.com/casbin/casbin). With this library, Casbin can load policy from DynamoDB and auto save during add/remove policy.
 
 > code is inspired by [github.com/hooqtv/dynacasbin](https://github.com/HOOQTV/dynacasbin), and autoSave support for it.
 
