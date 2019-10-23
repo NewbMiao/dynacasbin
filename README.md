@@ -51,7 +51,7 @@ func main() {
 
 	fmt.Println(e.GetPolicy())
 
-	// Since autoSave is support.No need use SavePolicy(), cause recreate table has latency, will be failed
+	// Since autoSave is support.No need use SavePolicy()
 	//e.SavePolicy()
 }
 ```
