@@ -57,6 +57,7 @@ func main() {
 ```
 ## Notes
 -  No need use LoadPolicy and SavePolicy.
+
     Auto save is supported now.
     SavePolicy is overwrite by just batch putItems without recreate table and adapter.loadPolicy after.
     Cause dynamodb recreate table has latency, 
@@ -64,6 +65,7 @@ func main() {
 which is unreliable.
 
 - About policy unique
+
     ID is hash key which value is unique by use md5(policy)
     
 - About RemoveFilteredPolicy
