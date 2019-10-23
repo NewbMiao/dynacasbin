@@ -91,6 +91,15 @@ func isPolicyExistInDB(rules [][3]string) bool {
 
 func TestLoadPolicy(t *testing.T) {
 	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	//reload policy， so you call e.LoadPolicy multi times is ok
+	err := e.LoadPolicy()
+	// but a.LoadPolicy only can load policy. call it multi times will repeat policy multi times.
+	//a.LoadPolicy(e.GetModel()) //Do Not Use it.
+
+	if err != nil {
+		t.Error("TestLoadPolicy err:" + err.Error())
+		return
+	}
 	res := make([][]string, 0)
 	items, err := a.getAllItems()
 	if err != nil {
@@ -127,4 +136,20 @@ func TestRemoveFilteredPolicy(t *testing.T) {
 	if isPolicyExistInDB([][3]string{{"data2_admin", "data2", "read"}, {"data2_admin", "data2", "write"}}) {
 		t.Error("TestRemoveFilteredPolicy is not ok")
 	}
+}
+
+func TestSavePolicy(t *testing.T) {
+	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	items, err := a.getAllItems()
+	res := make([][]string, 0)
+	for _, item := range items {
+		res = append(res, []string{item.V0, item.V1, item.V2})
+	}
+	err = e.SavePolicy()
+	if err != nil {
+		t.Error("TestSavePolicy err:" + err.Error())
+		return
+	}
+
+	testGetPolicy(t, e, res)
 }

@@ -1,7 +1,6 @@
 package dynacasbin
 
 import (
-	"errors"
 	"fmt"
 	"regexp"
 
@@ -83,6 +82,8 @@ func loadPolicyLine(line CasbinRule, model model.Model) {
 	persist.LoadPolicyLine(lineText, model)
 }
 
+//!important: call Enforcer.LoadPolicy rather than call Adapter.LoadPolicy.
+// cause call Adapter.LoadPolicy multi times will repeat policys multi times.
 func (a *Adapter) LoadPolicy(model model.Model) error {
 	p, err := a.getAllItems()
 	if err != nil {
@@ -126,13 +127,7 @@ func savePolicyLine(ptype string, rule []string) CasbinRule {
 
 //save all policy
 func (a *Adapter) SavePolicy(model model.Model) error {
-	//IMPORTANT: better not use， may recreate table failed under aws delete latency）
-	//If you still wanna use it, comment this line of code below.
-	return errors.New("not implemented")
-
-	a.DeleteTable()
-	a.CreateTable()
-
+	//IMPORTANT: No need use it now.
 	var lines []CasbinRule
 
 	for ptype, ast := range model["p"] {
@@ -150,7 +145,6 @@ func (a *Adapter) SavePolicy(model model.Model) error {
 	}
 
 	_, err := a.saveItems(lines)
-	a.LoadPolicy(model)
 	return err
 }
 
