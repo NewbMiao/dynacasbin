@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/casbin/casbin"
+	"github.com/casbin/casbin/v2"
 	"github.com/newbmiao/dynacasbin"
 )
 
@@ -19,13 +19,20 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	e := casbin.NewEnforcer("rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("rbac_model.conf", a)
+	if err != nil {
+		panic(err)
+	}
 
 	// Since autoSave is support.No need use LoadPolicy()
 	//e.LoadPolicy()
 
 	// Check the permission.
-	if e.Enforce("alice", "data1", "read") {
+	result, err := e.Enforce("alice", "data1", "read")
+	if err != nil {
+		panic(err)
+	}
+	if result {
 		fmt.Println("alice can read data1")
 	} else {
 		fmt.Println("alice can not read data1")

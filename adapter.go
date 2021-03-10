@@ -5,8 +5,11 @@ import (
 	"regexp"
 
 	"crypto/md5"
-	"github.com/casbin/casbin/model"
-	"github.com/casbin/casbin/persist"
+
+	"github.com/casbin/casbin/v2/model"
+
+	"github.com/casbin/casbin/v2/persist"
+
 	"github.com/guregu/dynamo"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -280,7 +283,7 @@ func (a *Adapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int,
 				continue
 			}
 			//items = append(items, dynamo.Keys{item.ID, item.PType}) //sort key: PType
-			items = append(items, dynamo.Keys{item.ID,}) // no sort key
+			items = append(items, dynamo.Keys{item.ID}) // no sort key
 		}
 	}
 
