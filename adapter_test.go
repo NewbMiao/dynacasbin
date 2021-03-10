@@ -2,13 +2,15 @@ package dynacasbin
 
 import (
 	"fmt"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/casbin/casbin"
 	"os"
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+
+	"github.com/casbin/casbin/v2"
 )
 
 var config *aws.Config
@@ -90,9 +92,13 @@ func isPolicyExistInDB(rules [][3]string) bool {
 }
 
 func TestLoadPolicy(t *testing.T) {
-	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	if err != nil {
+		t.Error("failed to create enforcer with `examples/rbac_model.conf`")
+		return
+	}
 	//reload policy， so you call e.LoadPolicy multi times is ok
-	err := e.LoadPolicy()
+	err = e.LoadPolicy()
 	// but a.LoadPolicy only can load policy. call it multi times will repeat policy multi times.
 	//a.LoadPolicy(e.GetModel()) //Do Not Use it.
 
@@ -112,7 +118,11 @@ func TestLoadPolicy(t *testing.T) {
 }
 
 func TestAddPolicy(t *testing.T) {
-	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	if err != nil {
+		t.Error("failed to create enforcer with `examples/rbac_model.conf`")
+		return
+	}
 	e.AddPolicy("jack", "data3", "read")
 	if !isPolicyExistInDB([][3]string{{"jack", "data3", "read"}}) {
 		t.Error("TestAddPolicy is not ok")
@@ -120,7 +130,12 @@ func TestAddPolicy(t *testing.T) {
 }
 
 func TestRemovePolicy(t *testing.T) {
-	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", a)
+
+	if err != nil {
+		t.Error("failed to create enforcer with `examples/rbac_model.conf`")
+		return
+	}
 	params := []interface{}{"alice", "data1", "read"}
 	e.RemovePolicy(params...)
 
@@ -130,7 +145,11 @@ func TestRemovePolicy(t *testing.T) {
 }
 
 func TestRemoveFilteredPolicy(t *testing.T) {
-	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	if err != nil {
+		t.Error("failed to create enforcer with `examples/rbac_model.conf`")
+		return
+	}
 	e.RemoveFilteredPolicy(0, "data2_admin")
 	//check load is ok
 	if isPolicyExistInDB([][3]string{{"data2_admin", "data2", "read"}, {"data2_admin", "data2", "write"}}) {
@@ -139,7 +158,13 @@ func TestRemoveFilteredPolicy(t *testing.T) {
 }
 
 func TestSavePolicy(t *testing.T) {
-	e := casbin.NewEnforcer("examples/rbac_model.conf", a)
+	e, err := casbin.NewEnforcer("examples/rbac_model.conf", a)
+
+	if err != nil {
+		t.Error("failed to create enforcer with `examples/rbac_model.conf`")
+		return
+	}
+
 	items, err := a.getAllItems()
 	res := make([][]string, 0)
 	for _, item := range items {
